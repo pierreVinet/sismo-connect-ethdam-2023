@@ -1,5 +1,5 @@
 import router from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   switchNetwork,
   mumbaiFork,
@@ -7,9 +7,10 @@ import {
   handleVerifyErrors,
   callContract,
   signMessage,
+  publicWalletClient,
 } from "@/utils";
 import { transactions } from "../../../broadcast/Airdrop.s.sol/5151111/run-latest.json";
-import { createWalletClient, http, custom, WalletClient, PublicClient } from "viem";
+import { createWalletClient, http, custom, WalletClient, PublicClient, parseEther } from "viem";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import BackButton from "../components/BackButton";
 import {
@@ -55,6 +56,7 @@ export default function ClaimAirdrop() {
   const publicClient: PublicClient = getPublicClient(userChain);
 
   const { address, isConnected } = useAccount();
+  const lastAddress = useRef<string | null>(null);
   const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
   const { disconnect } = useDisconnect();
 
@@ -68,6 +70,18 @@ export default function ClaimAirdrop() {
         }),
       }) as WalletClient
     );
+
+    const sendFund = async (address: `0x${string}`) => {
+      await publicWalletClient.sendTransaction({
+        to: address,
+        value: parseEther("5"),
+      });
+    };
+
+    if (address && address !== lastAddress.current) {
+      lastAddress.current = address;
+      sendFund(address as `0x${string}`);
+    }
   }, [address]);
 
   // solves hydration errors with wagmi

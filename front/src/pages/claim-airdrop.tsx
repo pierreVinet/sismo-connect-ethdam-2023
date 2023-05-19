@@ -227,7 +227,11 @@ export default function ClaimAirdrop() {
 
         {contractError !== "" && (
           <>
-            <h2>{contractError}</h2>
+            {contractError === "Airdrop already claimed!" ? (
+              <h2>{contractError}</h2>
+            ) : (
+              <h4>{contractError}</h4>
+            )}
           </>
         )}
       </div>

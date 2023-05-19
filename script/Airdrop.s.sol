@@ -6,10 +6,10 @@ import "forge-std/console.sol";
 import {Airdrop} from "src/Airdrop.sol";
 
 contract DeployAirdrop is Script {
-    function run() public {
-        vm.startBroadcast();
-        Airdrop airdrop = new Airdrop("My airdrop contract", "AIR");
-        console.log("Airdrop Contract deployed at", address(airdrop));
-        vm.stopBroadcast();
-    }
+  function run() public {
+    vm.startBroadcast();
+    Airdrop airdrop = new Airdrop("My airdrop contract", "AIR");
+    console.log("Airdrop Contract deployed at", address(airdrop));
+    vm.stopBroadcast();
+  }
 }

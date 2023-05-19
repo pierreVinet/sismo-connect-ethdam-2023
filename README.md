@@ -73,7 +73,7 @@ yarn deploy-local
 ### Run contract tests
 
 sismoConnectVerifier contracts are currently deployed on Goerli and Mumbai.
-You can find the deployed addresses [here](https://docs.sismo.io/sismo-docs/technical-documentation/sismo-101).
+You can find the deployed addresses [here](https://docs.sismo.io/sismo-docs/knowledge-base/resources/sismo-101).
 You can then run tests on a local fork network to test your contracts.
 
 ```bash

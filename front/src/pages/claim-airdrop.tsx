@@ -26,13 +26,13 @@ export enum APP_STATES {
   claimingNFT,
 }
 
-// The application calls contracts on Mumbai testnet
+// The application calls contracts defined above
 const userChain = mumbaiFork;
 const contractAddress = transactions[0].contractAddress;
 
 // you can create a new Sismo Connect app at https://factory.sismo.io
 // The SismoConnectClientConfig is a configuration needed to connect to Sismo Connect and requests data from your users.
-// You can find more information about the configuration here: https://docs.sismo.io/build-with-sismo-connect/technical-documentation/sismo-connect-react
+// You can find more information about the configuration here: https://docs.sismo.io/build-with-sismo-connect/technical-documentation/client
 
 export const sismoConnectConfig: SismoConnectClientConfig = {
   appId: "0xf4977993e52606cfd67b7a1cde717069",
@@ -98,7 +98,7 @@ export default function ClaimAirdrop() {
   // This function is called when the user is redirected from the Sismo Vault to the Sismo Connect app
   // It is called with the responseBytes returned by the Sismo Vault
   // The responseBytes is a string that contains plenty of information about the user proofs and additional parameters that should hold with respect to the proofs
-  // You can learn more about the responseBytes format here: https://docs.sismo.io/build-with-sismo-connect/technical-documentation/sismo-connect-client#getresponsebytes
+  // You can learn more about the responseBytes format here: https://docs.sismo.io/build-with-sismo-connect/technical-documentation/client#getresponsebytes
   async function claimWithSismo(responseBytes: string) {
     setAppState(APP_STATES.claimingNFT);
     // switch the network
@@ -168,7 +168,7 @@ export default function ClaimAirdrop() {
               // - onResponseBytes: the callback that will be called when the user is redirected back from the his Sismo Vault to the Sismo Connect App with the Sismo Connect response as bytes
               // - verifying: a boolean that indicates if the Sismo Connect button is in the verifying state
               // - callbackPath: the path to which the user will be redirected back from the Sismo Vault to the Sismo Connect App
-              // You can see more information about the Sismo Connect button in the Sismo Connect documentation: https://docs.sismo.io/build-with-sismo-connect/technical-documentation/sismo-connect-react
+              // You can see more information about the Sismo Connect button in the Sismo Connect documentation: https://docs.sismo.io/build-with-sismo-connect/technical-documentation/react
             }
             {!contractError &&
               isConnected &&

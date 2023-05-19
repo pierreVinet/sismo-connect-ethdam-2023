@@ -124,8 +124,8 @@ const main = async () => {
   // we first register the root for each dev group
   // it will allow us to use only one devGroup in a SismoConfig for example
   for (const devGroup of devGroups) {
-    await registerRootForDevGroups([devGroup]);
-    onChainDevGroups.push(devGroup);
+    await registerRootForDevGroups([devGroup as DevGroup]);
+    onChainDevGroups.push(devGroup as DevGroup);
   }
   // we then register the root for all the dev groups
   // it will allow us to use all the devGroups in a SismoConfig for example

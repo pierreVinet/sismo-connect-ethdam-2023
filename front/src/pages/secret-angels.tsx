@@ -20,6 +20,7 @@ import {
   ClaimType, // the claimType enum, we will choose 'GTE' in this tutorial, to check that the user has a value greater than a given threshold
 } from "@sismo-core/sismo-connect-react";
 import { devGroups } from "../config";
+import { polygon } from "viem/chains";
 
 export enum APP_STATES {
   init,
@@ -38,11 +39,12 @@ const contractAddress = transactions[0].contractAddress;
 export const sismoConnectConfig: SismoConnectClientConfig = {
   appId: "0x233d8ed9e8c2c89ccc3bccdece915115",
   devMode: {
-    enabled: true,
+    enabled: false,
+    // devGroups: [devGroups[0]],
   },
 };
 
-export default function ClaimAirdrop() {
+export default function AngelsIdentification() {
   const [isReady, setIsReady] = useState(false);
   const [appState, setAppState] = useState<APP_STATES>(APP_STATES.init);
   const [responseBytes, setResponseBytes] = useState<string>("");
@@ -122,22 +124,17 @@ export default function ClaimAirdrop() {
     }
   }
 
+  console.log("Response Byte", responseBytes);
+
   return (
     <>
       <BackButton />
       <div className="container">
         {!tokenId && (
           <>
-            <h1 style={{ marginBottom: 10 }}>Claim an airdrop</h1>
-            {!address && (
-              <p style={{ marginBottom: 40 }}>
-                Select on which address you want to receive the airdrop and sign it with Sismo
-                Connect
-              </p>
-            )}
-
+            <h1 style={{ marginBottom: 10 }}>Angels</h1>
             {address && isReady ? (
-              <p style={{ marginBottom: 40 }}>You will receive the airdrop on {address}</p>
+              <p style={{ marginBottom: 40 }}></p>
             ) : (
               <div>
                 {connectors.map((connector) => (
@@ -181,13 +178,14 @@ export default function ClaimAirdrop() {
                   // the auth request we want to make
                   // here we want the proof of a Sismo Vault ownership from our users
                   auths={[{ authType: AuthType.VAULT }]}
+                  //   claim={{ groupId: devGroups[0].groupId }}
                   // we ask the user to sign a message
                   // it will be used onchain to prevent front running
-                  signature={{ message: signMessage(address) }}
+                  //   signature={{ message: signMessage(address) }}
                   // onResponseBytes calls a 'setResponse' function with the responseBytes returned by the Sismo Vault
                   onResponseBytes={(responseBytes: string) => setResponse(responseBytes)}
                   // Some text to display on the button
-                  text={"Claim with Sismo"}
+                  text={"Connect with Sismo"}
                 />
               )}
 
@@ -198,10 +196,10 @@ export default function ClaimAirdrop() {
                 onClick={async () => {
                   await claimWithSismo(responseBytes);
                 }}
-                value="Claim NFT"
+                value="Move funds"
               >
                 {" "}
-                Claim NFT{" "}
+                Move funds{" "}
               </button>
             )}
             {appState == APP_STATES.claimingNFT && (

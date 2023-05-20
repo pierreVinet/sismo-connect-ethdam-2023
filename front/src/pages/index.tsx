@@ -14,8 +14,9 @@ export default function Home() {
       </h1>
       <section>
         <ul>
-          <li onClick={() => router.push("/claim-airdrop")}>
-            <h3>Claim an airdrop</h3>
+          <li onClick={() => router.push("/secret-angels")}>
+            <h3>Secret Angels</h3>
+            <p></p>
             {/* replace with the title below */}
             {/* <h3>Claim an airdrop anonymously</h3>
             <p>Sign an address with Sismo Connect where you wish to receive the airdrop</p> */}

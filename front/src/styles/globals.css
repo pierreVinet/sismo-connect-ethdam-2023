@@ -76,7 +76,7 @@ ul {
   gap: 20px;
 }
 
-li {
+/* li {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -140,7 +140,7 @@ li:after {
 
 li:hover:after {
   transform: translate(5px, 0px);
-}
+} */
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;

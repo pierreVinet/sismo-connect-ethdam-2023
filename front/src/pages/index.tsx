@@ -12,7 +12,7 @@ export default function Home() {
         src="/assets/sismo-landing-art.svg"
         alt="sismo art"
       />
-      <h1>Sismo Connect Onchain</h1>
+      <h1 className="">Sismo Connect Onchain</h1>
       <section>
         <ul>
           <li onClick={() => router.push("/secret-angels")}>

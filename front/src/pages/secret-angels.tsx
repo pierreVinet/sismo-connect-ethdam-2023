@@ -187,7 +187,7 @@ export default function AngelsIdentification() {
                   // onResponseBytes calls a 'setResponse' function with the responseBytes returned by the Sismo Vault
                   onResponseBytes={(responseBytes: string) => setResponse(responseBytes)}
                   // Some text to display on the button
-                  text={"Connect with Sismo test"}
+                  text={"Connect with Sismo"}
                 />
               )}
 

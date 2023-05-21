@@ -1,15 +1,15 @@
 import router from "next/router";
 import { useEffect, useRef, useState } from "react";
-import {
-  switchNetwork,
-  mumbaiFork,
-  getPublicClient,
-  handleVerifyErrors,
-  callContract,
-  signMessage,
-  publicWalletClient,
-} from "@/utils";
-import { transactions } from "../../../broadcast/Airdrop.s.sol/5151111/run-latest.json";
+// import {
+//   switchNetwork,
+//   mumbaiFork,
+//   getPublicClient,
+//   handleVerifyErrors,
+//   callContract,
+//   signMessage,
+//   publicWalletClient,
+// } from "@/utils";
+// import { transactions } from "../../../broadcast/Airdrop.s.sol/5151111/run-latest.json";
 import { createWalletClient, http, custom, WalletClient, PublicClient, parseEther } from "viem";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import BackButton from "../components/BackButton";
@@ -19,8 +19,9 @@ import {
   AuthType, // the authType enum, we will choose 'VAULT' in this tutorial
   ClaimType, // the claimType enum, we will choose 'GTE' in this tutorial, to check that the user has a value greater than a given threshold
 } from "@sismo-core/sismo-connect-react";
-import { devGroups } from "../config";
-import { polygon } from "viem/chains";
+import { goerli } from "viem/chains";
+// import { devGroups } from "../config";
+// import { polygon } from "viem/chains";
 
 export enum APP_STATES {
   init,
@@ -29,8 +30,8 @@ export enum APP_STATES {
 }
 
 // The application calls contracts defined above
-const userChain = mumbaiFork;
-const contractAddress = transactions[0].contractAddress;
+// const userChain = mumbaiFork;
+// const contractAddress = transactions[0].contractAddress;
 
 // you can create a new Sismo Connect app at https://factory.sismo.io
 // The SismoConnectClientConfig is a configuration needed to connect to Sismo Connect and requests data from your users.
@@ -39,7 +40,7 @@ const contractAddress = transactions[0].contractAddress;
 export const sismoConnectConfig: SismoConnectClientConfig = {
   appId: "0x233d8ed9e8c2c89ccc3bccdece915115",
   devMode: {
-    enabled: false,
+    enabled: true,
     // devGroups: [devGroups[0]],
   },
 };
@@ -52,11 +53,11 @@ export default function AngelsIdentification() {
   const [tokenId, setTokenId] = useState<{ id: string }>();
   const [walletClient, setWalletClient] = useState<WalletClient>(
     createWalletClient({
-      chain: userChain,
+      chain: goerli,
       transport: http(),
     }) as WalletClient
   );
-  const publicClient: PublicClient = getPublicClient(userChain);
+  // const publicClient: PublicClient = getPublicClient(userChain);
 
   const { address, isConnected } = useAccount();
   const lastAddress = useRef<string | null>(null);
@@ -67,24 +68,24 @@ export default function AngelsIdentification() {
     if (typeof window === "undefined") return;
     setWalletClient(
       createWalletClient({
-        chain: userChain,
-        transport: custom(window.ethereum, {
+        chain: goerli,
+        transport: custom((window as any).ethereum, {
           key: "windowProvider",
         }),
       }) as WalletClient
     );
 
-    const sendFund = async (address: `0x${string}`) => {
-      await publicWalletClient.sendTransaction({
-        to: address,
-        value: parseEther("5"),
-      });
-    };
+    // const sendFund = async (address: `0x${string}`) => {
+    //   await publicWalletClient.sendTransaction({
+    //     to: address,
+    //     value: parseEther("5"),
+    //   });
+    // };
 
-    if (address && address !== lastAddress.current) {
-      lastAddress.current = address;
-      sendFund(address as `0x${string}`);
-    }
+    // if (address && address !== lastAddress.current) {
+    //   lastAddress.current = address;
+    //   sendFund(address as `0x${string}`);
+    // }
   }, [address]);
 
   // solves hydration errors with wagmi
@@ -102,29 +103,30 @@ export default function AngelsIdentification() {
   // It is called with the responseBytes returned by the Sismo Vault
   // The responseBytes is a string that contains plenty of information about the user proofs and additional parameters that should hold with respect to the proofs
   // You can learn more about the responseBytes format here: https://docs.sismo.io/build-with-sismo-connect/technical-documentation/client#getresponsebytes
-  async function claimWithSismo(responseBytes: string) {
-    setAppState(APP_STATES.claimingNFT);
-    // switch the network
-    await switchNetwork(userChain);
-    try {
-      const tokenId = await callContract({
-        contractAddress,
-        responseBytes,
-        userChain,
-        address: address as `0x${string}`,
-        publicClient,
-        walletClient,
-      });
-      // If the proof is valid, we update the user react state to show the tokenId
-      setTokenId({ id: tokenId });
-    } catch (e) {
-      setContractError(handleVerifyErrors(e));
-    } finally {
-      setAppState(APP_STATES.init);
-    }
-  }
+  // async function claimWithSismo(responseBytes: string) {
+  //   setAppState(APP_STATES.claimingNFT);
+  //   // switch the network
+  //   await switchNetwork(userChain);
+  //   try {
+  //     const tokenId = await callContract({
+  //       contractAddress,
+  //       responseBytes,
+  //       userChain,
+  //       address: address as `0x${string}`,
+  //       publicClient,
+  //       walletClient,
+  //     });
+  //     // If the proof is valid, we update the user react state to show the tokenId
+  //     setTokenId({ id: tokenId });
+  //   } catch (e) {
+  //     setContractError(handleVerifyErrors(e));
+  //   } finally {
+  //     setAppState(APP_STATES.init);
+  //   }
+  // }
 
   console.log("Response Byte", responseBytes);
+  console.log("config", sismoConnectConfig);
 
   return (
     <>
@@ -142,7 +144,7 @@ export default function AngelsIdentification() {
                     disabled={!connector.ready}
                     key={connector.id}
                     onClick={() => {
-                      router.push("/claim-airdrop");
+                      router.push("/secret-angels");
                       connect({ connector });
                     }}
                     className="wallet-button"
@@ -178,19 +180,19 @@ export default function AngelsIdentification() {
                   // the auth request we want to make
                   // here we want the proof of a Sismo Vault ownership from our users
                   auths={[{ authType: AuthType.VAULT }]}
-                  //   claim={{ groupId: devGroups[0].groupId }}
+                  claim={{ groupId: "0x3497b46c5dcd30bf8ee001fe3fdd0acd" }}
                   // we ask the user to sign a message
                   // it will be used onchain to prevent front running
                   //   signature={{ message: signMessage(address) }}
                   // onResponseBytes calls a 'setResponse' function with the responseBytes returned by the Sismo Vault
                   onResponseBytes={(responseBytes: string) => setResponse(responseBytes)}
                   // Some text to display on the button
-                  text={"Connect with Sismo"}
+                  text={"Connect with Sismo test"}
                 />
               )}
 
             {/** Simple button to call the smart contract with the response as bytes */}
-            {appState == APP_STATES.receivedProof && (
+            {/* {appState == APP_STATES.receivedProof && (
               <button
                 className="wallet-button"
                 onClick={async () => {
@@ -201,14 +203,14 @@ export default function AngelsIdentification() {
                 {" "}
                 Move funds{" "}
               </button>
-            )}
-            {appState == APP_STATES.claimingNFT && (
+            )} */}
+            {/* {appState == APP_STATES.claimingNFT && (
               <p style={{ marginBottom: 40 }}>Claiming NFT...</p>
-            )}
+            )} */}
           </>
         )}
 
-        {tokenId && (
+        {/* {tokenId && (
           <>
             <h1>Airdrop claimed!</h1>
             <p style={{ marginBottom: 20 }}>
@@ -222,9 +224,9 @@ export default function AngelsIdentification() {
               </div>
             </div>
           </>
-        )}
+        )} */}
 
-        {contractError !== "" && (
+        {/* {contractError !== "" && (
           <>
             {contractError === "Airdrop already claimed!" ? (
               <h2>{contractError}</h2>
@@ -232,7 +234,7 @@ export default function AngelsIdentification() {
               <h4>{contractError}</h4>
             )}
           </>
-        )}
+        )} */}
       </div>
 
       {isConnected && (
@@ -240,9 +242,9 @@ export default function AngelsIdentification() {
           className="wallet-button wallet-button--disconnect"
           onClick={() => {
             disconnect();
-            setTokenId(undefined);
+            // setTokenId(undefined);
             setContractError("");
-            setAppState(APP_STATES.init);
+            // setAppState(APP_STATES.init);
           }}
         >
           Disconnect

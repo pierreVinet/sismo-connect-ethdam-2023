@@ -7,11 +7,12 @@ export default function Home() {
 
   return (
     <div className="container">
-      <h1>
-        Tutorial
-        <br />
-        Sismo Connect Onchain
-      </h1>
+      <img
+        style={{ position: "absolute", right: 0, zIndex: -1 }}
+        src="/assets/sismo-landing-art.svg"
+        alt="sismo art"
+      />
+      <h1>Sismo Connect Onchain</h1>
       <section>
         <ul>
           <li onClick={() => router.push("/secret-angels")}>
